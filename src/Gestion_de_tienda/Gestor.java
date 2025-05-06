@@ -31,6 +31,7 @@ public class Gestor {
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
+                    System.out.println("Error, ya existe producto");
                     break;
                 case 2:
                     System.out.println("¿Que producto buscas? introduce el nombre");
@@ -41,15 +42,23 @@ public class Gestor {
                 case 3:
                     System.out.println("Introduce nombre producto: ");
                     nombreP = in.nextLine();
-                    System.out.println("Introduce nuevo precio: ");
-                    precio = in.nextLine();
-                    System.out.println("Introduce nuevo cantidad: ");
-                    cantidad = in.nextLine();
                     try {
-                        modificarProducto(precio,nombreP,cantidad);
+                        if (!duplicado(nombreP)) {
+                            System.out.println("Introduce nuevo precio: ");
+                            precio = in.nextLine();
+                            System.out.println("Introduce nuevo cantidad: ");
+                            cantidad = in.nextLine();
+                            try {
+                                modificarProducto(precio, nombreP, cantidad);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
+                    System.out.println("Error, no existe producto");
+                    break;
                 case 4:
                     System.out.println("Gracias por usarnos, hasta la proxima!!!!");
                     break;
@@ -103,14 +112,15 @@ public class Gestor {
         return null;
     }
     public static void modificarProducto(String nPrecio,String nNombre,String nCantidad) throws SQLException {
-        try {
-            Connection miConexion = DriverManager.getConnection(uri, usuario, password);
-            Statement senteciaSQL = miConexion.createStatement();
-            String sql = "update stock set precio = " + nPrecio + ", cantidad ="+nCantidad +" where nombre ='" + nNombre + "'";
-            senteciaSQL.executeUpdate(sql);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+            try {
+                Connection miConexion = DriverManager.getConnection(uri, usuario, password);
+                Statement senteciaSQL = miConexion.createStatement();
+                String sql = "update stock set precio = " + nPrecio + ", cantidad =" + nCantidad + " where nombre ='" + nNombre + "'";
+                senteciaSQL.executeUpdate(sql);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
     }
     public static boolean duplicado(String nombre) throws SQLException {
         Connection miConexion = DriverManager.getConnection(uri, usuario, password);
