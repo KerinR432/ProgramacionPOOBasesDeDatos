@@ -20,11 +20,17 @@ public class Gestor {
                 case 1:
                     System.out.println("Introduce un nombre...");
                     nombreP = in.nextLine();
-                    System.out.println("Introduce Precio...");
-                    precio = in.nextLine();
-                    System.out.println("Introduce Stock...");
-                    cantidad = in.nextLine();
-                    darDeAlta(nombreP,precio,cantidad);
+                    try {
+                        if (duplicado(nombreP)) {
+                            System.out.println("Introduce Precio...");
+                            precio = in.nextLine();
+                            System.out.println("Introduce Stock...");
+                            cantidad = in.nextLine();
+                            darDeAlta(nombreP, precio, cantidad);
+                        }
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
                     break;
                 case 2:
                     System.out.println("¿Que producto buscas? introduce el nombre");
@@ -33,6 +39,17 @@ public class Gestor {
                     System.out.println(texto);
                     break;
                 case 3:
+                    System.out.println("Introduce nombre producto: ");
+                    nombreP = in.nextLine();
+                    System.out.println("Introduce nuevo precio: ");
+                    precio = in.nextLine();
+                    System.out.println("Introduce nuevo cantidad: ");
+                    cantidad = in.nextLine();
+                    try {
+                        modificarProducto(precio,nombreP,cantidad);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
                 case 4:
                     System.out.println("Gracias por usarnos, hasta la proxima!!!!");
                     break;
@@ -85,7 +102,28 @@ public class Gestor {
         }
         return null;
     }
-    public static void modificarProducto(){
-
+    public static void modificarProducto(String nPrecio,String nNombre,String nCantidad) throws SQLException {
+        try {
+            Connection miConexion = DriverManager.getConnection(uri, usuario, password);
+            Statement senteciaSQL = miConexion.createStatement();
+            String sql = "update stock set precio = " + nPrecio + ", cantidad ="+nCantidad +" where nombre ='" + nNombre + "'";
+            senteciaSQL.executeUpdate(sql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static boolean duplicado(String nombre) throws SQLException {
+        Connection miConexion = DriverManager.getConnection(uri, usuario, password);
+        Statement setenciaSQL = miConexion.createStatement();
+        String sql = "select nombre from stock;";
+        ResultSet resultSet = setenciaSQL.executeQuery(sql);
+        String n = "";
+        while (resultSet.next()){
+            n=resultSet.getString("nombre");
+            if (nombre.equalsIgnoreCase(n)){
+                return false;
+            }
+        }
+        return true;
     }
 }
