@@ -56,7 +56,7 @@ public class informeStock {
                 int c=0;
                 c=resultSet.getInt("cantidad");
                 n=resultSet.getString("nombre");
-                datos = "Producto:"+idx+"\n "+"Nombre :"+n+"|"+"|"+"Stock: "+c;
+                datos += "Producto:"+idx+"\n "+"Nombre :"+n+"|"+"|"+"Stock: "+c+"\n";
                 idx++;
 
             }

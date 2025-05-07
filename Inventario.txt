@@ -1,0 +1,4 @@
+Producto:0
+ Nombre :peras||Stock: 6
+Producto:1
+ Nombre :patata||Stock: 4
