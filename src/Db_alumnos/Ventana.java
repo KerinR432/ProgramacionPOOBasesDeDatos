@@ -103,22 +103,23 @@ public class Ventana extends JFrame implements ActionListener {
         }
         return datosAlumnos;
     }
-    public static String ultimoID(int id){
+    public static String ultimoID(){
         Statement setenciaSQL = null;
         ResultSet resultSet = null;
-        String idS ="";
+        int idS=0;
         try {
             setenciaSQL = connection.createStatement();
-            String sql="select max("+ id +") as sGID from alumno;";
+            String sql="select max(id)+1 as id from alumno";
             resultSet=setenciaSQL.executeQuery(sql);
             if (resultSet.next()){
-                idS=resultSet.getString("sGID");
+                idS=resultSet.getInt(0);
+                idS+=1;
             }
             System.out.println(sql);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return idS;
+        return ""+idS;
     }
 
     @Override
@@ -126,11 +127,10 @@ public class Ventana extends JFrame implements ActionListener {
         conectarConBD();
         String sql="insert into alumno values (";
         if (bto1==e.getSource()){
-            /*int id = 0;
-             id =Integer.parseInt(ultimoID(id+1));
+            int id =Integer.parseInt(ultimoID());
             tex4.setText(""+id);
             System.out.println(tex4);
-            System.out.println();*/
+            System.out.println();
             sql+=tex4.getText();
             sql+=",'";
             sql+=tex1.getText();
