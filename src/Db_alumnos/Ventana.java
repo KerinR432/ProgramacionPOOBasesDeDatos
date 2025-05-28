@@ -7,22 +7,30 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class Ventana extends JFrame implements ActionListener {
-        private JPanel panel;
-        private JLabel etq,et2,et3,et4;
-        private JTextField tex1,tex2,tex3,tex4;
-        private JButton bto1,bto2;
-        static Scanner in = new Scanner(System.in);
-        static Connection connection;
+    private JPanel panel;
+    private JLabel etq;
+    private JLabel et2;
+    private JLabel et3;
+    private JLabel et4;
+    private JTextField tex1;
+    private JTextField tex2;
+    private JTextField tex3;
+    private JTextField tex4;
+    private JButton bto1;
+    private JButton bto2;
+    static Scanner in = new Scanner(System.in);
+    static Connection connection;
 
-    public Ventana(){
-    super("Informe estudiantes");
-        this.setBounds(0,0,500,450);
+    public Ventana() {
+        super("Informe estudiantes");
+        this.setBounds(0, 0, 500, 450);
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         contruirPanel();
         this.setVisible(true);
     }
-    private void contruirPanel(){
+
+    private void contruirPanel() {
         panel = new JPanel();
 
         et2 = new JLabel();
@@ -56,16 +64,16 @@ public class Ventana extends JFrame implements ActionListener {
         bto1 = new JButton("Insertar");
         panel.add(bto1);
         bto1.addActionListener(this);
-        bto2= new JButton("Buscar");
+        bto2 = new JButton("Buscar");
         panel.add(bto2);
         bto2.addActionListener(this);
 
         this.add(panel);
 
 
-
     }
-    public static void conectarConBD(){
+
+    public static void conectarConBD() {
         try {
             String uri = "jdbc:mysql://localhost:3306/db_alumnos";
             String usuario = "root";
@@ -75,7 +83,8 @@ public class Ventana extends JFrame implements ActionListener {
             System.out.println(e.getMessage());
         }
     }
-    public static void ejecutarIntruccionesSQL(String sql){
+
+    public static void ejecutarIntruccionesSQL(String sql) {
         try {
             Statement senteciaSQL = connection.createStatement();
             senteciaSQL.executeUpdate(sql);
@@ -83,66 +92,71 @@ public class Ventana extends JFrame implements ActionListener {
             System.out.println(e.getMessage());
         }
     }
-    public static String buscarAlumno(String id){
-        Statement setenciaSQL = null;
-        ResultSet resultSet = null;
-        String datosAlumnos="";
+
+    public static String buscarAlumno(String id) {
+        Statement setenciaSQL;
+        ResultSet resultSet;
+        String datosAlumnos = "";
         try {
             setenciaSQL = connection.createStatement();
-            String sql="select * from alumno"+" where id="+
-                    id+";";
-            resultSet= setenciaSQL.executeQuery(sql);
-            if (resultSet.next()){
-                datosAlumnos=resultSet.getString("nombre")+","
-                        +resultSet.getDouble("edad")+","
-                        +resultSet.getInt("nota_media");
+            String sql = "select * from alumno" + " where id=" +
+                    id + ";";
+            resultSet = setenciaSQL.executeQuery(sql);
+            if (resultSet.next()) {
+                datosAlumnos = resultSet.getString("nombre") + ","
+                        + resultSet.getDouble("edad") + ","
+                        + resultSet.getInt("nota_media");
             }
+
             System.out.println(sql);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        } finally {
+
         }
         return datosAlumnos;
     }
-    public static String ultimoID(){
-        Statement setenciaSQL = null;
-        ResultSet resultSet = null;
-        int idS=0;
+
+    public static String ultimoID() {
+        Statement setenciaSQL;
+        ResultSet resultSet;
+        int idS = 0;
         try {
             setenciaSQL = connection.createStatement();
-            String sql="select max(id)+1 as id from alumno";
-            resultSet=setenciaSQL.executeQuery(sql);
-            if (resultSet.next()){
-                idS=resultSet.getInt(0);
-                idS+=1;
+            String sql = "select max(id)+1 as id from alumno";
+            resultSet = setenciaSQL.executeQuery(sql);
+            if (resultSet.next()) {
+                idS = resultSet.getInt("id");
+                idS += 1;
             }
             System.out.println(sql);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return ""+idS;
+        return "" + idS;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         conectarConBD();
-        String sql="insert into alumno values (";
-        if (bto1==e.getSource()){
-            int id =Integer.parseInt(ultimoID());
-            tex4.setText(""+id);
+        String sql = "insert into alumno values (";
+        if (bto1 == e.getSource()) {
+            int id = Integer.parseInt(ultimoID());
+            tex4.setText("" + id);
             System.out.println(tex4);
             System.out.println();
-            sql+=tex4.getText();
-            sql+=",'";
-            sql+=tex1.getText();
-            sql+="',";
-            sql+=tex2.getText();
-            sql+=",";
-            sql+=tex3.getText();
-            sql+=")";
+            sql += tex4.getText();
+            sql += ",'";
+            sql += tex1.getText();
+            sql += "',";
+            sql += tex2.getText();
+            sql += ",";
+            sql += tex3.getText();
+            sql += ")";
             System.out.println(sql);
             ejecutarIntruccionesSQL(sql);
         }
-        if (bto2==e.getSource()) {
+        if (bto2 == e.getSource()) {
             String id = tex4.getText();
             String datos = buscarAlumno(id);
             String[] ej = null;

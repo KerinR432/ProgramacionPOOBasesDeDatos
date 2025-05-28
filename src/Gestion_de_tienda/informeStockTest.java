@@ -52,7 +52,7 @@ class informeStockTest {
     }
     @Test
     public void buscar(){
-        String resultado = informeStock.buscarEnLaBasesDeDatos();
+        String resultado = MyinformeStock.buscarEnLaBasesDeDatos();
         assertTrue(resultado.contains("Manzana"));
         assertTrue(resultado.contains("10"));
         assertTrue(resultado.contains("PERAS"));

@@ -11,7 +11,7 @@ public class AccesoABasesDeDatosPersona_Insertar {
         String uri = "jdbc:mysql://localhost:3306/pr_ejemplo";
         String usuario = "root";
         String password = "Root123*";
-        // Paso 1: Crear conexion entre estas app y MySQL
+        // Paso 1: Crear conexion entre este app y MySQL
         try {
             Connection miConexion = DriverManager.getConnection(uri, usuario, password);
             //Paso 2: Crear una sentencia SQL

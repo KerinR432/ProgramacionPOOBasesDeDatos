@@ -21,7 +21,8 @@ public class AccesoABasesDeDatosPersona_Consultar {
             //paso4: Recorremos el Resulset
 
             while (resultSet.next()){
-                String dni = "",nombre="";
+                String dni = "";
+                String nombre="";
                 int edad = 0;
 
                 dni = resultSet.getString("dni");

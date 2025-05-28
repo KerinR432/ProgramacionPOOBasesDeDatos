@@ -7,13 +7,13 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Scanner;
 
-public class informeStock {
+public class MyinformeStock {
     static Scanner in = new Scanner(System.in);
     static String uri = "jdbc:mysql://localhost:3306/pr_ejemplo";
     static String usuario = "root";
     static String password = "Root123*";
     public static void main(String[] args) {
-        char op = ' ';
+        char op;
         do {
             menu();
             op=in.nextLine().charAt(0);
@@ -52,8 +52,8 @@ public class informeStock {
             int idx=0;
             //paso4: Recorremos el Resulset
             while (resultSet.next()){
-                String n="";
-                int c=0;
+                String n;
+                int c;
                 c=resultSet.getInt("cantidad");
                 n=resultSet.getString("nombre");
                 datos += "Producto:"+idx+"\n "+"Nombre :"+n+"|"+"|"+"Stock: "+c+"\n";
@@ -68,7 +68,7 @@ public class informeStock {
     }
 
     public static void escribirInventario(String datos){
-        FileWriter salida = null;
+        FileWriter salida;
         try {
             //construyo el canal
             salida = new FileWriter("Inventario.txt");
@@ -82,16 +82,14 @@ public class informeStock {
     }
     public static void mostrarInventario(){
         FileReader entrada;
-        String inv ="";
         try {
             int car=0;
             entrada = new FileReader("Inventario.txt");
             while (car!=-1){
                 car= entrada.read();
-                inv =car+"";
             }
             entrada.close();
-        } catch (FileNotFoundException e) { //<-- este es él más concreto
+        } catch (FileNotFoundException e) { //<-- este es él más concretó
             System.out.println(e.getMessage());
         } catch (IOException e) {
             System.out.println(e.getMessage());
